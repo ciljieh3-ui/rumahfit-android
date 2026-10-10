@@ -23,11 +23,13 @@ jobs:
       - name: 3. Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: 4. Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: 4. Download & Setup Gradle Otomatis
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
 
       - name: 5. Build Debug APK
-        run: gradle assembleDebug --stacktrace
+        run: gradle assembleDebug --no-daemon --stacktrace
 
       - name: 6. Upload File APK ke Artifacts
         uses: actions/upload-artifact@v4
