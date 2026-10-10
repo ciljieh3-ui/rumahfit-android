@@ -20,15 +20,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: 3. Download Gradle 8.10.2
+      - name: 3. Setujui Lisensi SDK
+        run: |
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      - name: 4. Download Gradle 8.10.2
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10.2'
 
-      - name: 4. Build Debug APK
-        run: gradle assembleDebug --stacktrace
+      - name: 5. Lengkapi Folder & Versi SDK Otomatis
+        run: |
+          mkdir -p app/src/main/res/values
+          echo '<resources><string name="app_name">RumahFit</string></resources>' > app/src/main/res/values/strings.xml
+          sed -i 's/compileSdk = 35/compileSdk = 34/g' app/build.gradle.kts || true
+          sed -i 's/targetSdk = 35/targetSdk = 34/g' app/build.gradle.kts || true
 
-      - name: 5. Upload File APK ke Artifacts
+      - name: 6. Build Debug APK
+        run: gradle assembleDebug --stacktrace --no-daemon
+
+      - name: 7. Upload File APK ke Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: RumahFit-LiquidGlass-Debug-APK
